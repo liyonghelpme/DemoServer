@@ -53,6 +53,7 @@ def insertAndGetId(sql, params=None):
     return id
 
 def update(sql, params=None):
+    print sql, params
     con = getConn()
     cur = con.cursor()
     rowcount = 0

@@ -8,16 +8,33 @@ import json
 app = Flask(__name__)
 app.config.from_object("config")
 
+#获得普通的英雄数据
 @app.route('/getAllHeroData', methods=['POST'])
 def getAllHeroData():
     res = queryAll('select * from HeroData')
     return jsonify(dict(heroData=res))
+@app.route('/getUserData', methods=['POST'])
+def getUserData():
+    uid = request.form.get('uid', None, type=int)
+    res = queryOne('select * from Users where uid = %s', (uid))
+    return jsonify(dict(user=res))
 @app.route('/getAllHero', methods=['POST'])
 def getAllHero():
-    res = queryAll('select hid, kind, level, job from Heroes where uid = %s', (1))
-    formation = queryOne('select formation from Users where uid = %s', (1))
+    uid = request.form.get("uid", None, type=int)
+    res = queryAll('select hid, kind, level, job from Heroes where uid = %s', (uid))
+    formation = queryOne('select formation from Users where uid = %s', (uid))
     return jsonify(dict(heroes=res, formation=json.loads(formation['formation'])))
-
+@app.route('/sellHero', methods=['POST'])
+def sellHero():
+    uid = request.form.get('uid', None, type=int)
+    heroes = request.form.get('heroes', None, type=str)
+    heroes = json.loads(heroes)
+    res = '(%s)'%','.join(['%s']*len(heroes))
+    sql = 'delete from Heroes where uid = %s and hid in '+ res
+    heroes.insert(0, uid)
+    update(sql, heroes)
+    return jsonify(dict(code=1))
+         
 
 
 @app.route('/getAllLevel', methods=['POST'])
