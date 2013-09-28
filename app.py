@@ -24,6 +24,16 @@ def getAllHero():
     res = queryAll('select hid, kind, level, job from Heroes where uid = %s', (uid))
     formation = queryOne('select formation from Users where uid = %s', (uid))
     return jsonify(dict(heroes=res, formation=json.loads(formation['formation'])))
+
+@app.route('/buyHero', methods=['POST'])
+def buyHero():
+    uid = request.form.get('uid', None, type=int) 
+    hids = request.form.get('hids', None, type=str)
+    hids = json.loads(hids)
+    for h in hids:
+        update('insert into Heroes (uid, hid, kind, level, job) values (%s, %s, %s, %s, %s)', (uid, h[1], h[0], 0, 0))
+    return jsonify(dict(code=1))
+
 @app.route('/sellHero', methods=['POST'])
 def sellHero():
     uid = request.form.get('uid', None, type=int)
@@ -34,6 +44,30 @@ def sellHero():
     heroes.insert(0, uid)
     update(sql, heroes)
     return jsonify(dict(code=1))
+
+@app.route('/levelup', methods=['POST'])
+def levelup():
+    uid = request.form.get('uid', None, type=int)
+    hid = request.form.get('hid', None, type=int)
+    cost = request.form.get('cost', None, type=str)
+
+    update('update Heroes set level = level+1 where uid = %s and hid = %s', (uid, hid))
+    return jsonify(dict(code=1))
+
+@app.route('/transferJob', methods=['POST'])
+def transferJob():
+    uid = request.form.get('uid', None, type=int)
+    hid = request.form.get('hid', None, type=int)
+    update('update Heroes set job = job+1 where uid = %s and hid = %s', (uid, hid))
+    return jsonify(dict(code=1))
+
+@app.route('/fastJob', methods=['POST'])
+def fastJob():
+    uid = request.form.get('uid', None, type=int)
+    hid = request.form.get('hid', None, type=int)
+    update('update Heroes set job = job+1 where uid = %s and hid = %s', (uid, hid))
+    return jsonify(dict(code=1))
+    
          
 
 
