@@ -1,7 +1,7 @@
 HOST = 'localhost'
-DATABASE = 'nozomi'
+DATABASE = 'qishituan'
 DEBUG = True
-PASSWORD = 'badperson3'
+PASSWORD = 'badperson'
 ADMINS = ['233242872@qq.com']
 HOSTPORT = 9012
 SORTPORT = 9003
@@ -12,5 +12,5 @@ ERROR_SERVER = "nozomiError.log"
 ERROR_RANK = "rankError.log"
 STATISTIC_PORT = 9004
 
-dbInfo = [{'host':'localhost', 'user':'root', 'passwd':'badperson3', 'db':'qishituan'} ]
+dbInfo = [{'host':'localhost', 'user':'root', 'passwd':PASSWORD, 'db':'qishituan'} ]
 userCut = [99999999]
