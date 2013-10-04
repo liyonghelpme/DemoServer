@@ -12,7 +12,11 @@ app.config.from_object("config")
 @app.route('/getAllHeroData', methods=['POST'])
 def getAllHeroData():
     res = queryAll('select * from HeroData')
-    return jsonify(dict(heroData=res))
+    roleViews = queryAll('select * from knight_view_property')
+    skills = queryAll('select * from knight_skill_data')
+    enemys = queryAll('select * from `Level`')
+    others = queryAll('select * from `knight_scene_property')
+    return jsonify(dict(heroData=res, viewData=roleViews, skillData=skills, enemysData=enemys, others=others))
 @app.route('/getUserData', methods=['POST'])
 def getUserData():
     uid = request.form.get('uid', None, type=int)
